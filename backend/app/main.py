@@ -5,6 +5,8 @@ from fastapi.responses import FileResponse, JSONResponse
 
 from app.auth.router import router as auth_router
 from app.events.router import router as events_router
+from app.imports.router import router as imports_router
+from app.invitations.router import router as invitations_router
 
 app = FastAPI(title="RSVP System", docs_url="/api/docs", openapi_url="/api/openapi.json")
 
@@ -20,6 +22,8 @@ async def csrf_guard(request: Request, call_next):
 
 app.include_router(auth_router)
 app.include_router(events_router)
+app.include_router(invitations_router)
+app.include_router(imports_router)
 
 
 @app.get("/api/health")

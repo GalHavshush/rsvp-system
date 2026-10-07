@@ -9,7 +9,7 @@ from app.events.schemas import EventIn, EventOut
 router = APIRouter(prefix="/api/events", dependencies=[Depends(current_admin)])
 
 
-def _get(db: Session, event_id: int) -> Event:
+def get_event(db: Session, event_id: int) -> Event:
     event = db.get(Event, event_id)
     if not event:
         raise HTTPException(404, "event_not_found")
@@ -30,13 +30,13 @@ def create_event(body: EventIn, db: Session = Depends(get_db)):
 
 
 @router.get("/{event_id}", response_model=EventOut)
-def get_event(event_id: int, db: Session = Depends(get_db)):
-    return _get(db, event_id)
+def read_event(event_id: int, db: Session = Depends(get_db)):
+    return get_event(db, event_id)
 
 
 @router.put("/{event_id}", response_model=EventOut)
 def update_event(event_id: int, body: EventIn, db: Session = Depends(get_db)):
-    event = _get(db, event_id)
+    event = get_event(db, event_id)
     for k, v in body.model_dump().items():
         setattr(event, k, v)
     db.commit()
@@ -45,5 +45,5 @@ def update_event(event_id: int, body: EventIn, db: Session = Depends(get_db)):
 
 @router.delete("/{event_id}", status_code=204)
 def delete_event(event_id: int, db: Session = Depends(get_db)):
-    db.delete(_get(db, event_id))
+    db.delete(get_event(db, event_id))
     db.commit()

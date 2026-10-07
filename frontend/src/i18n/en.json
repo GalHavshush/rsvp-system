@@ -1,6 +1,17 @@
 {
-  "app": { "name": "Event Manager" },
-  "common": { "save": "Save", "cancel": "Cancel", "delete": "Delete", "edit": "Edit", "logout": "Log out", "loading": "Loading…", "language": "עברית" },
+  "app": {
+    "name": "Event Manager"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "logout": "Log out",
+    "loading": "Loading…",
+    "language": "עברית",
+    "add": "Add"
+  },
   "auth": {
     "setupTitle": "Initial setup",
     "setupHint": "The first account becomes the system owner.",
@@ -15,11 +26,23 @@
     "new": "New event",
     "empty": "No events yet. Create the first one!",
     "confirmDelete": "Delete this event and all its guest data? This cannot be undone.",
-    "types": { "wedding": "Wedding", "other": "Other" },
+    "types": {
+      "wedding": "Wedding",
+      "other": "Other"
+    },
     "fields": {
-      "name": "Event name", "type": "Event type", "date": "Date", "time": "Time", "venue": "Venue",
-      "address": "Address", "waze_url": "Waze link", "maps_url": "Google Maps link", "hosts": "Hosts",
-      "rsvp_deadline": "RSVP deadline", "default_language": "Default language", "notes": "Notes"
+      "name": "Event name",
+      "type": "Event type",
+      "date": "Date",
+      "time": "Time",
+      "venue": "Venue",
+      "address": "Address",
+      "waze_url": "Waze link",
+      "maps_url": "Google Maps link",
+      "hosts": "Hosts",
+      "rsvp_deadline": "RSVP deadline",
+      "default_language": "Default language",
+      "notes": "Notes"
     }
   },
   "errors": {
@@ -27,6 +50,107 @@
     "already_set_up": "The system is already set up",
     "too_many_attempts": "Too many attempts, try again in a few minutes",
     "email_taken": "Email already in use",
-    "generic": "Something went wrong, please try again"
+    "generic": "Something went wrong, please try again",
+    "unsupported_file_type": "Unsupported file type (XLSX or CSV only)",
+    "file_too_large": "File is too large",
+    "empty_file": "The file is empty",
+    "too_many_rows": "Too many rows (max 5000)",
+    "unreadable_file": "Could not read the file",
+    "invalid_mapping": "Invalid column mapping",
+    "duplicate_mapping": "The same target is chosen for more than one column"
+  },
+  "nav": {
+    "back": "All events",
+    "invitations": "Invitations",
+    "import": "Import"
+  },
+  "rsvp": {
+    "status": {
+      "no_response": "No response",
+      "coming": "Coming",
+      "not_coming": "Not coming",
+      "maybe": "Maybe"
+    }
+  },
+  "invitations": {
+    "new": "New invitation",
+    "search": "Search name or phone",
+    "allStatuses": "All statuses",
+    "allGroups": "All groups",
+    "missingPhone": "Missing phone",
+    "invalidPhone": "Invalid phone",
+    "export": "Export CSV",
+    "total": "{{count}} invitations",
+    "empty": "No invitations yet. Add one or import a file.",
+    "noResults": "No matching invitations.",
+    "confirmDelete": "Delete this invitation? This cannot be undone.",
+    "attendees": "attending",
+    "sort": {
+      "name": "Name (A-Z)",
+      "-name": "Name (Z-A)",
+      "-updated": "Recently updated",
+      "status": "Status"
+    },
+    "form": {
+      "name": "Invitation name",
+      "group": "Group",
+      "notes": "Notes",
+      "members": "People",
+      "memberName": "Name",
+      "addMember": "Add person",
+      "phones": "Phone numbers",
+      "phone": "Phone",
+      "addPhone": "Add phone",
+      "noMember": "Not linked",
+      "invalid": "Invalid number",
+      "remove": "Remove"
+    }
+  },
+  "import": {
+    "title": "Import invitations from a file",
+    "hint": "XLSX or CSV. Each row is one invitation, with repeating name/phone columns.",
+    "choose": "Choose file",
+    "mapTitle": "Match columns",
+    "mapHint": "Check that each column is matched correctly. You can fix it manually.",
+    "preview": "Preview",
+    "back": "Back",
+    "confirm": "Confirm and import",
+    "rows": "{{count}} rows",
+    "counts": {
+      "ok": "OK",
+      "warning": "Warnings",
+      "conflict": "Conflicts",
+      "error": "Errors"
+    },
+    "done": "Import complete",
+    "result": "Created {{created}}, updated {{updated}}, skipped {{skipped}}",
+    "toInvitations": "Go to invitations",
+    "target": {
+      "ignore": "Ignore",
+      "invitation_name": "Invitation name",
+      "group": "Group",
+      "note": "Notes",
+      "person": "Person {{n}}",
+      "phone": "Phone {{n}}"
+    },
+    "action": {
+      "skip": "Skip",
+      "update": "Update existing",
+      "new": "Import as new"
+    },
+    "conflictWith": "Existing: {{name}}",
+    "colRow": "Row",
+    "colName": "Invitation",
+    "colPeople": "People",
+    "colIssues": "Issues",
+    "colAction": "Action"
+  },
+  "issues": {
+    "missing_name": "Missing invitation name",
+    "invalid_phone": "Invalid phone: {{detail}}",
+    "duplicate_phone_in_file": "Phone repeated in file: {{detail}}",
+    "duplicate_row": "Duplicate row",
+    "existing_phone": "Phone already exists: {{detail}}",
+    "existing_name": "Invitation name already exists"
   }
 }

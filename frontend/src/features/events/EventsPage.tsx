@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { api } from "../../api/client";
 import type { components } from "../../api/schema";
 
@@ -75,7 +76,7 @@ export function EventsPage() {
         {events.data?.map((e) => (
           <li key={e.id} className="flex items-center justify-between rounded-2xl border border-stone-200 bg-white p-4">
             <div>
-              <div className="font-medium" dir="auto">{e.name}</div>
+              <Link to={`/events/${e.id}`} className="font-medium hover:underline" dir="auto">{e.name}</Link>
               <div className="text-sm text-stone-500">{[e.date && fmt(e.date), e.venue].filter(Boolean).join(" · ")}</div>
             </div>
             <div className="flex gap-3 text-sm">

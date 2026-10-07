@@ -132,13 +132,153 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get Event */
-        get: operations["get_event_api_events__event_id__get"];
+        /** Read Event */
+        get: operations["read_event_api_events__event_id__get"];
         /** Update Event */
         put: operations["update_event_api_events__event_id__put"];
         post?: never;
         /** Delete Event */
         delete: operations["delete_event_api_events__event_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/events/{event_id}/invitations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Invitations */
+        get: operations["list_invitations_api_events__event_id__invitations_get"];
+        put?: never;
+        /** Create Invitation */
+        post: operations["create_invitation_api_events__event_id__invitations_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/events/{event_id}/invitations/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Export Invitations */
+        get: operations["export_invitations_api_events__event_id__invitations_export_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/invitations/{invitation_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Invitation */
+        get: operations["get_invitation_api_invitations__invitation_id__get"];
+        /** Update Invitation */
+        put: operations["update_invitation_api_invitations__invitation_id__put"];
+        post?: never;
+        /** Delete Invitation */
+        delete: operations["delete_invitation_api_invitations__invitation_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/events/{event_id}/groups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Groups */
+        get: operations["list_groups_api_events__event_id__groups_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/{group_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Rename Group */
+        put: operations["rename_group_api_groups__group_id__put"];
+        post?: never;
+        /** Delete Group */
+        delete: operations["delete_group_api_groups__group_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/events/{event_id}/imports/parse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Parse */
+        post: operations["parse_api_events__event_id__imports_parse_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/events/{event_id}/imports/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Preview */
+        post: operations["preview_api_events__event_id__imports_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/events/{event_id}/imports/commit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Commit */
+        post: operations["commit_api_events__event_id__imports_commit_post"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -165,6 +305,61 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** Body_parse_api_events__event_id__imports_parse_post */
+        Body_parse_api_events__event_id__imports_parse_post: {
+            /** File */
+            file: string;
+        };
+        /** CommitRequest */
+        CommitRequest: {
+            /** Mapping */
+            mapping: string[];
+            /** Rows */
+            rows: string[][];
+            /**
+             * Actions
+             * @default {}
+             */
+            actions: {
+                [key: string]: "skip" | "update" | "new";
+            };
+        };
+        /** CommitResult */
+        CommitResult: {
+            /** Created */
+            created: number;
+            /** Updated */
+            updated: number;
+            /** Skipped */
+            skipped: number;
+        };
+        /** Conflict */
+        Conflict: {
+            /** Invitation Id */
+            invitation_id: number;
+            /** Invitation Name */
+            invitation_name: string;
+        };
+        /** ContactIn */
+        ContactIn: {
+            /** Phone */
+            phone: string;
+            /** Member Index */
+            member_index?: number | null;
+        };
+        /** ContactOut */
+        ContactOut: {
+            /** Id */
+            id: number;
+            /** Member Id */
+            member_id: number | null;
+            /** Phone Raw */
+            phone_raw: string;
+            /** Phone E164 */
+            phone_e164: string | null;
+            /** Phone Valid */
+            phone_valid: boolean;
+        };
         /** Credentials */
         Credentials: {
             /**
@@ -245,10 +440,148 @@ export interface components {
             /** Id */
             id: number;
         };
+        /** GroupIn */
+        GroupIn: {
+            /** Name */
+            name: string;
+        };
+        /** GroupOut */
+        GroupOut: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /** InvitationIn */
+        InvitationIn: {
+            /** Display Name */
+            display_name: string;
+            /** Group Name */
+            group_name?: string | null;
+            /** Notes */
+            notes?: string | null;
+            /**
+             * Members
+             * @default []
+             */
+            members: components["schemas"]["MemberIn"][];
+            /**
+             * Contacts
+             * @default []
+             */
+            contacts: components["schemas"]["ContactIn"][];
+        };
+        /** InvitationOut */
+        InvitationOut: {
+            /** Id */
+            id: number;
+            /** Event Id */
+            event_id: number;
+            /** Display Name */
+            display_name: string;
+            /** Group Name */
+            group_name: string | null;
+            /** Rsvp Token */
+            rsvp_token: string;
+            /**
+             * Rsvp Status
+             * @enum {string}
+             */
+            rsvp_status: "no_response" | "coming" | "not_coming" | "maybe";
+            /** Attendee Count */
+            attendee_count: number | null;
+            /** Rsvp Updated At */
+            rsvp_updated_at: string | null;
+            /** Rsvp Source */
+            rsvp_source: string | null;
+            /** Notes */
+            notes: string | null;
+            /** Message State */
+            message_state: string;
+            /** Members */
+            members: components["schemas"]["MemberOut"][];
+            /** Contacts */
+            contacts: components["schemas"]["ContactOut"][];
+        };
+        /** InvitationPage */
+        InvitationPage: {
+            /** Items */
+            items: components["schemas"]["InvitationOut"][];
+            /** Total */
+            total: number;
+        };
+        /** Issue */
+        Issue: {
+            /** Code */
+            code: string;
+            /**
+             * Level
+             * @enum {string}
+             */
+            level: "error" | "warning" | "conflict";
+            /** Detail */
+            detail?: string | null;
+        };
+        /** MemberIn */
+        MemberIn: {
+            /** Name */
+            name: string;
+        };
+        /** MemberOut */
+        MemberOut: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+        };
+        /** ParsedSheet */
+        ParsedSheet: {
+            /** Headers */
+            headers: string[];
+            /** Rows */
+            rows: string[][];
+            /** Mapping */
+            mapping: string[];
+        };
+        /** Preview */
+        Preview: {
+            /** Rows */
+            rows: components["schemas"]["PreviewRow"][];
+            /** Counts */
+            counts: {
+                [key: string]: number;
+            };
+        };
+        /** PreviewRequest */
+        PreviewRequest: {
+            /** Mapping */
+            mapping: string[];
+            /** Rows */
+            rows: string[][];
+        };
+        /** PreviewRow */
+        PreviewRow: {
+            /** Index */
+            index: number;
+            draft: components["schemas"]["InvitationIn"] | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ok" | "warning" | "conflict" | "error";
+            /** Issues */
+            issues: components["schemas"]["Issue"][];
+            conflict?: components["schemas"]["Conflict"] | null;
+            /**
+             * Default Action
+             * @enum {string}
+             */
+            default_action: "skip" | "update" | "new";
         };
         /** SetupStatus */
         SetupStatus: {
@@ -570,7 +903,7 @@ export interface operations {
             };
         };
     };
-    get_event_api_events__event_id__get: {
+    read_event_api_events__event_id__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -659,6 +992,440 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_invitations_api_events__event_id__invitations_get: {
+        parameters: {
+            query?: {
+                sort?: "name" | "-name" | "updated" | "-updated" | "status";
+                limit?: number;
+                offset?: number;
+                q?: string | null;
+                rsvp_status?: ("no_response" | "coming" | "not_coming" | "maybe") | null;
+                group_id?: number | null;
+                missing_phone?: boolean;
+                invalid_phone?: boolean;
+                message_state?: string | null;
+            };
+            header?: never;
+            path: {
+                event_id: number;
+            };
+            cookie?: {
+                session?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvitationPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_invitation_api_events__event_id__invitations_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: number;
+            };
+            cookie?: {
+                session?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InvitationIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvitationOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    export_invitations_api_events__event_id__invitations_export_get: {
+        parameters: {
+            query?: {
+                lang?: "he" | "en";
+                q?: string | null;
+                rsvp_status?: ("no_response" | "coming" | "not_coming" | "maybe") | null;
+                group_id?: number | null;
+                missing_phone?: boolean;
+                invalid_phone?: boolean;
+                message_state?: string | null;
+            };
+            header?: never;
+            path: {
+                event_id: number;
+            };
+            cookie?: {
+                session?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_invitation_api_invitations__invitation_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                invitation_id: number;
+            };
+            cookie?: {
+                session?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvitationOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_invitation_api_invitations__invitation_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                invitation_id: number;
+            };
+            cookie?: {
+                session?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InvitationIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvitationOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_invitation_api_invitations__invitation_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                invitation_id: number;
+            };
+            cookie?: {
+                session?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_groups_api_events__event_id__groups_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: number;
+            };
+            cookie?: {
+                session?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GroupOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    rename_group_api_groups__group_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                group_id: number;
+            };
+            cookie?: {
+                session?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GroupIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GroupOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_group_api_groups__group_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                group_id: number;
+            };
+            cookie?: {
+                session?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    parse_api_events__event_id__imports_parse_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: number;
+            };
+            cookie?: {
+                session?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_parse_api_events__event_id__imports_parse_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParsedSheet"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preview_api_events__event_id__imports_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: number;
+            };
+            cookie?: {
+                session?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PreviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Preview"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    commit_api_events__event_id__imports_commit_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: number;
+            };
+            cookie?: {
+                session?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommitRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommitResult"];
+                };
             };
             /** @description Validation Error */
             422: {

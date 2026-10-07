@@ -1,6 +1,17 @@
 {
-  "app": { "name": "ניהול אירוע" },
-  "common": { "save": "שמירה", "cancel": "ביטול", "delete": "מחיקה", "edit": "עריכה", "logout": "התנתקות", "loading": "טוען…", "language": "English" },
+  "app": {
+    "name": "ניהול אירוע"
+  },
+  "common": {
+    "save": "שמירה",
+    "cancel": "ביטול",
+    "delete": "מחיקה",
+    "edit": "עריכה",
+    "logout": "התנתקות",
+    "loading": "טוען…",
+    "language": "English",
+    "add": "הוספה"
+  },
   "auth": {
     "setupTitle": "הגדרה ראשונית",
     "setupHint": "החשבון הראשון הוא הבעלים של המערכת.",
@@ -15,11 +26,23 @@
     "new": "אירוע חדש",
     "empty": "עדיין אין אירועים. צרו את הראשון!",
     "confirmDelete": "למחוק את האירוע וכל נתוני האורחים שלו? אי אפשר לשחזר.",
-    "types": { "wedding": "חתונה", "other": "אחר" },
+    "types": {
+      "wedding": "חתונה",
+      "other": "אחר"
+    },
     "fields": {
-      "name": "שם האירוע", "type": "סוג אירוע", "date": "תאריך", "time": "שעה", "venue": "מקום",
-      "address": "כתובת", "waze_url": "קישור ל-Waze", "maps_url": "קישור ל-Google Maps", "hosts": "מארחים",
-      "rsvp_deadline": "תאריך אחרון לאישור הגעה", "default_language": "שפת ברירת מחדל", "notes": "הערות"
+      "name": "שם האירוע",
+      "type": "סוג אירוע",
+      "date": "תאריך",
+      "time": "שעה",
+      "venue": "מקום",
+      "address": "כתובת",
+      "waze_url": "קישור ל-Waze",
+      "maps_url": "קישור ל-Google Maps",
+      "hosts": "מארחים",
+      "rsvp_deadline": "תאריך אחרון לאישור הגעה",
+      "default_language": "שפת ברירת מחדל",
+      "notes": "הערות"
     }
   },
   "errors": {
@@ -27,6 +50,107 @@
     "already_set_up": "המערכת כבר הוגדרה",
     "too_many_attempts": "יותר מדי ניסיונות, נסו שוב בעוד כמה דקות",
     "email_taken": "האימייל כבר בשימוש",
-    "generic": "משהו השתבש, נסו שוב"
+    "generic": "משהו השתבש, נסו שוב",
+    "unsupported_file_type": "סוג קובץ לא נתמך (XLSX או CSV בלבד)",
+    "file_too_large": "הקובץ גדול מדי",
+    "empty_file": "הקובץ ריק",
+    "too_many_rows": "יותר מדי שורות (עד 5000)",
+    "unreadable_file": "לא ניתן לקרוא את הקובץ",
+    "invalid_mapping": "התאמת עמודות לא תקינה",
+    "duplicate_mapping": "אותו יעד נבחר ליותר מעמודה אחת"
+  },
+  "nav": {
+    "back": "כל האירועים",
+    "invitations": "הזמנות",
+    "import": "ייבוא מקובץ"
+  },
+  "rsvp": {
+    "status": {
+      "no_response": "לא ענו",
+      "coming": "מגיעים",
+      "not_coming": "לא מגיעים",
+      "maybe": "אולי"
+    }
+  },
+  "invitations": {
+    "new": "הזמנה חדשה",
+    "search": "חיפוש שם או טלפון",
+    "allStatuses": "כל הסטטוסים",
+    "allGroups": "כל הקבוצות",
+    "missingPhone": "ללא טלפון",
+    "invalidPhone": "טלפון לא תקין",
+    "export": "ייצוא ל-Excel/CSV",
+    "total": "{{count}} הזמנות",
+    "empty": "אין הזמנות עדיין. הוסיפו הזמנה או ייבאו קובץ.",
+    "noResults": "לא נמצאו הזמנות מתאימות.",
+    "confirmDelete": "למחוק את ההזמנה? אי אפשר לשחזר.",
+    "attendees": "מגיעים",
+    "sort": {
+      "name": "שם (א-ת)",
+      "-name": "שם (ת-א)",
+      "-updated": "עודכן לאחרונה",
+      "status": "סטטוס"
+    },
+    "form": {
+      "name": "שם ההזמנה",
+      "group": "קבוצה",
+      "notes": "הערות",
+      "members": "אנשים",
+      "memberName": "שם",
+      "addMember": "הוספת אדם",
+      "phones": "טלפונים",
+      "phone": "טלפון",
+      "addPhone": "הוספת טלפון",
+      "noMember": "ללא שיוך",
+      "invalid": "מספר לא תקין",
+      "remove": "הסרה"
+    }
+  },
+  "import": {
+    "title": "ייבוא הזמנות מקובץ",
+    "hint": "קובץ XLSX או CSV. כל שורה היא הזמנה אחת, עם עמודות חוזרות של שם וטלפון.",
+    "choose": "בחירת קובץ",
+    "mapTitle": "התאמת עמודות",
+    "mapHint": "בדקו שכל עמודה הותאמה נכון. אפשר לתקן ידנית.",
+    "preview": "תצוגה מקדימה",
+    "back": "חזרה",
+    "confirm": "אישור וייבוא",
+    "rows": "{{count}} שורות",
+    "counts": {
+      "ok": "תקינות",
+      "warning": "אזהרות",
+      "conflict": "התנגשויות",
+      "error": "שגיאות"
+    },
+    "done": "הייבוא הושלם",
+    "result": "נוצרו {{created}}, עודכנו {{updated}}, דולגו {{skipped}}",
+    "toInvitations": "מעבר להזמנות",
+    "target": {
+      "ignore": "התעלם",
+      "invitation_name": "שם הזמנה",
+      "group": "קבוצה",
+      "note": "הערות",
+      "person": "אדם {{n}}",
+      "phone": "טלפון {{n}}"
+    },
+    "action": {
+      "skip": "דילוג",
+      "update": "עדכון קיימת",
+      "new": "ייבוא כחדשה"
+    },
+    "conflictWith": "קיימת: {{name}}",
+    "colRow": "שורה",
+    "colName": "הזמנה",
+    "colPeople": "אנשים",
+    "colIssues": "בעיות",
+    "colAction": "פעולה"
+  },
+  "issues": {
+    "missing_name": "חסר שם הזמנה",
+    "invalid_phone": "טלפון לא תקין: {{detail}}",
+    "duplicate_phone_in_file": "טלפון חוזר בקובץ: {{detail}}",
+    "duplicate_row": "שורה כפולה",
+    "existing_phone": "טלפון קיים כבר: {{detail}}",
+    "existing_name": "שם הזמנה קיים כבר"
   }
 }

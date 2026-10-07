@@ -3,7 +3,7 @@
 Self-hosted, open-source event management: personalized RSVP links, guest lists and visual seating.
 Hebrew (RTL) first, English supported. Messaging runs in test mode (CSV export), so no WhatsApp account is needed.
 
-**Status:** early development. Done: login, events, Hebrew/English UI. Next: guests, import, RSVP links, seating.
+**Status:** early development. Done: login, events, Hebrew/English UI, guest invitations, XLSX/CSV import. Next: RSVP links, messaging export, seating.
 
 ## Run
 

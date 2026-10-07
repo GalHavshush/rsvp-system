@@ -394,8 +394,8 @@
   },
   "/api/events/{event_id}": {
    "get": {
-    "summary": "Get Event",
-    "operationId": "get_event_api_events__event_id__get",
+    "summary": "Read Event",
+    "operationId": "read_event_api_events__event_id__get",
     "parameters": [
      {
       "name": "event_id",
@@ -556,6 +556,940 @@
     }
    }
   },
+  "/api/events/{event_id}/invitations": {
+   "get": {
+    "summary": "List Invitations",
+    "operationId": "list_invitations_api_events__event_id__invitations_get",
+    "parameters": [
+     {
+      "name": "event_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Event Id"
+      }
+     },
+     {
+      "name": "sort",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "name",
+        "-name",
+        "updated",
+        "-updated",
+        "status"
+       ],
+       "type": "string",
+       "default": "name",
+       "title": "Sort"
+      }
+     },
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 500,
+       "minimum": 1,
+       "default": 100,
+       "title": "Limit"
+      }
+     },
+     {
+      "name": "offset",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "minimum": 0,
+       "default": 0,
+       "title": "Offset"
+      }
+     },
+     {
+      "name": "q",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Q"
+      }
+     },
+     {
+      "name": "rsvp_status",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "enum": [
+          "no_response",
+          "coming",
+          "not_coming",
+          "maybe"
+         ],
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Rsvp Status"
+      }
+     },
+     {
+      "name": "group_id",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "integer"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Group Id"
+      }
+     },
+     {
+      "name": "missing_phone",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "boolean",
+       "default": false,
+       "title": "Missing Phone"
+      }
+     },
+     {
+      "name": "invalid_phone",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "boolean",
+       "default": false,
+       "title": "Invalid Phone"
+      }
+     },
+     {
+      "name": "message_state",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Message State"
+      }
+     },
+     {
+      "name": "session",
+      "in": "cookie",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Session"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/InvitationPage"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "summary": "Create Invitation",
+    "operationId": "create_invitation_api_events__event_id__invitations_post",
+    "parameters": [
+     {
+      "name": "event_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Event Id"
+      }
+     },
+     {
+      "name": "session",
+      "in": "cookie",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Session"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/InvitationIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/InvitationOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/events/{event_id}/invitations/export": {
+   "get": {
+    "summary": "Export Invitations",
+    "operationId": "export_invitations_api_events__event_id__invitations_export_get",
+    "parameters": [
+     {
+      "name": "event_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Event Id"
+      }
+     },
+     {
+      "name": "lang",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "he",
+        "en"
+       ],
+       "type": "string",
+       "default": "he",
+       "title": "Lang"
+      }
+     },
+     {
+      "name": "q",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Q"
+      }
+     },
+     {
+      "name": "rsvp_status",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "enum": [
+          "no_response",
+          "coming",
+          "not_coming",
+          "maybe"
+         ],
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Rsvp Status"
+      }
+     },
+     {
+      "name": "group_id",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "integer"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Group Id"
+      }
+     },
+     {
+      "name": "missing_phone",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "boolean",
+       "default": false,
+       "title": "Missing Phone"
+      }
+     },
+     {
+      "name": "invalid_phone",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "boolean",
+       "default": false,
+       "title": "Invalid Phone"
+      }
+     },
+     {
+      "name": "message_state",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Message State"
+      }
+     },
+     {
+      "name": "session",
+      "in": "cookie",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Session"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/invitations/{invitation_id}": {
+   "get": {
+    "summary": "Get Invitation",
+    "operationId": "get_invitation_api_invitations__invitation_id__get",
+    "parameters": [
+     {
+      "name": "invitation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Invitation Id"
+      }
+     },
+     {
+      "name": "session",
+      "in": "cookie",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Session"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/InvitationOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "put": {
+    "summary": "Update Invitation",
+    "operationId": "update_invitation_api_invitations__invitation_id__put",
+    "parameters": [
+     {
+      "name": "invitation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Invitation Id"
+      }
+     },
+     {
+      "name": "session",
+      "in": "cookie",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Session"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/InvitationIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/InvitationOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "summary": "Delete Invitation",
+    "operationId": "delete_invitation_api_invitations__invitation_id__delete",
+    "parameters": [
+     {
+      "name": "invitation_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Invitation Id"
+      }
+     },
+     {
+      "name": "session",
+      "in": "cookie",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Session"
+      }
+     }
+    ],
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/events/{event_id}/groups": {
+   "get": {
+    "summary": "List Groups",
+    "operationId": "list_groups_api_events__event_id__groups_get",
+    "parameters": [
+     {
+      "name": "event_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Event Id"
+      }
+     },
+     {
+      "name": "session",
+      "in": "cookie",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Session"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/GroupOut"
+         },
+         "title": "Response List Groups Api Events  Event Id  Groups Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/groups/{group_id}": {
+   "put": {
+    "summary": "Rename Group",
+    "operationId": "rename_group_api_groups__group_id__put",
+    "parameters": [
+     {
+      "name": "group_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Group Id"
+      }
+     },
+     {
+      "name": "session",
+      "in": "cookie",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Session"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/GroupIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/GroupOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "summary": "Delete Group",
+    "operationId": "delete_group_api_groups__group_id__delete",
+    "parameters": [
+     {
+      "name": "group_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Group Id"
+      }
+     },
+     {
+      "name": "session",
+      "in": "cookie",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Session"
+      }
+     }
+    ],
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/events/{event_id}/imports/parse": {
+   "post": {
+    "summary": "Parse",
+    "operationId": "parse_api_events__event_id__imports_parse_post",
+    "parameters": [
+     {
+      "name": "event_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Event Id"
+      }
+     },
+     {
+      "name": "session",
+      "in": "cookie",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Session"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "multipart/form-data": {
+       "schema": {
+        "$ref": "#/components/schemas/Body_parse_api_events__event_id__imports_parse_post"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ParsedSheet"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/events/{event_id}/imports/preview": {
+   "post": {
+    "summary": "Preview",
+    "operationId": "preview_api_events__event_id__imports_preview_post",
+    "parameters": [
+     {
+      "name": "event_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Event Id"
+      }
+     },
+     {
+      "name": "session",
+      "in": "cookie",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Session"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/PreviewRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Preview"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/events/{event_id}/imports/commit": {
+   "post": {
+    "summary": "Commit",
+    "operationId": "commit_api_events__event_id__imports_commit_post",
+    "parameters": [
+     {
+      "name": "event_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Event Id"
+      }
+     },
+     {
+      "name": "session",
+      "in": "cookie",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Session"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CommitRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/CommitResult"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/health": {
    "get": {
     "summary": "Health",
@@ -575,6 +1509,174 @@
  },
  "components": {
   "schemas": {
+   "Body_parse_api_events__event_id__imports_parse_post": {
+    "properties": {
+     "file": {
+      "type": "string",
+      "contentMediaType": "application/octet-stream",
+      "title": "File"
+     }
+    },
+    "type": "object",
+    "required": [
+     "file"
+    ],
+    "title": "Body_parse_api_events__event_id__imports_parse_post"
+   },
+   "CommitRequest": {
+    "properties": {
+     "mapping": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Mapping"
+     },
+     "rows": {
+      "items": {
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "type": "array",
+      "title": "Rows"
+     },
+     "actions": {
+      "additionalProperties": {
+       "type": "string",
+       "enum": [
+        "skip",
+        "update",
+        "new"
+       ]
+      },
+      "type": "object",
+      "title": "Actions",
+      "default": {}
+     }
+    },
+    "type": "object",
+    "required": [
+     "mapping",
+     "rows"
+    ],
+    "title": "CommitRequest"
+   },
+   "CommitResult": {
+    "properties": {
+     "created": {
+      "type": "integer",
+      "title": "Created"
+     },
+     "updated": {
+      "type": "integer",
+      "title": "Updated"
+     },
+     "skipped": {
+      "type": "integer",
+      "title": "Skipped"
+     }
+    },
+    "type": "object",
+    "required": [
+     "created",
+     "updated",
+     "skipped"
+    ],
+    "title": "CommitResult"
+   },
+   "Conflict": {
+    "properties": {
+     "invitation_id": {
+      "type": "integer",
+      "title": "Invitation Id"
+     },
+     "invitation_name": {
+      "type": "string",
+      "title": "Invitation Name"
+     }
+    },
+    "type": "object",
+    "required": [
+     "invitation_id",
+     "invitation_name"
+    ],
+    "title": "Conflict"
+   },
+   "ContactIn": {
+    "properties": {
+     "phone": {
+      "type": "string",
+      "maxLength": 50,
+      "minLength": 1,
+      "title": "Phone"
+     },
+     "member_index": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Member Index"
+     }
+    },
+    "type": "object",
+    "required": [
+     "phone"
+    ],
+    "title": "ContactIn"
+   },
+   "ContactOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "member_id": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Member Id"
+     },
+     "phone_raw": {
+      "type": "string",
+      "title": "Phone Raw"
+     },
+     "phone_e164": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Phone E164"
+     },
+     "phone_valid": {
+      "type": "boolean",
+      "title": "Phone Valid"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "member_id",
+     "phone_raw",
+     "phone_e164",
+     "phone_valid"
+    ],
+    "title": "ContactOut"
+   },
    "Credentials": {
     "properties": {
      "email": {
@@ -875,6 +1977,39 @@
     ],
     "title": "EventOut"
    },
+   "GroupIn": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Name"
+     }
+    },
+    "type": "object",
+    "required": [
+     "name"
+    ],
+    "title": "GroupIn"
+   },
+   "GroupOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "name"
+    ],
+    "title": "GroupOut"
+   },
    "HTTPValidationError": {
     "properties": {
      "detail": {
@@ -887,6 +2022,418 @@
     },
     "type": "object",
     "title": "HTTPValidationError"
+   },
+   "InvitationIn": {
+    "properties": {
+     "display_name": {
+      "type": "string",
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Display Name"
+     },
+     "group_name": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 100
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Group Name"
+     },
+     "notes": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Notes"
+     },
+     "members": {
+      "items": {
+       "$ref": "#/components/schemas/MemberIn"
+      },
+      "type": "array",
+      "title": "Members",
+      "default": []
+     },
+     "contacts": {
+      "items": {
+       "$ref": "#/components/schemas/ContactIn"
+      },
+      "type": "array",
+      "title": "Contacts",
+      "default": []
+     }
+    },
+    "type": "object",
+    "required": [
+     "display_name"
+    ],
+    "title": "InvitationIn"
+   },
+   "InvitationOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "event_id": {
+      "type": "integer",
+      "title": "Event Id"
+     },
+     "display_name": {
+      "type": "string",
+      "title": "Display Name"
+     },
+     "group_name": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Group Name"
+     },
+     "rsvp_token": {
+      "type": "string",
+      "title": "Rsvp Token"
+     },
+     "rsvp_status": {
+      "type": "string",
+      "enum": [
+       "no_response",
+       "coming",
+       "not_coming",
+       "maybe"
+      ],
+      "title": "Rsvp Status"
+     },
+     "attendee_count": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Attendee Count"
+     },
+     "rsvp_updated_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Rsvp Updated At"
+     },
+     "rsvp_source": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Rsvp Source"
+     },
+     "notes": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Notes"
+     },
+     "message_state": {
+      "type": "string",
+      "title": "Message State"
+     },
+     "members": {
+      "items": {
+       "$ref": "#/components/schemas/MemberOut"
+      },
+      "type": "array",
+      "title": "Members"
+     },
+     "contacts": {
+      "items": {
+       "$ref": "#/components/schemas/ContactOut"
+      },
+      "type": "array",
+      "title": "Contacts"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "event_id",
+     "display_name",
+     "group_name",
+     "rsvp_token",
+     "rsvp_status",
+     "attendee_count",
+     "rsvp_updated_at",
+     "rsvp_source",
+     "notes",
+     "message_state",
+     "members",
+     "contacts"
+    ],
+    "title": "InvitationOut"
+   },
+   "InvitationPage": {
+    "properties": {
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/InvitationOut"
+      },
+      "type": "array",
+      "title": "Items"
+     },
+     "total": {
+      "type": "integer",
+      "title": "Total"
+     }
+    },
+    "type": "object",
+    "required": [
+     "items",
+     "total"
+    ],
+    "title": "InvitationPage"
+   },
+   "Issue": {
+    "properties": {
+     "code": {
+      "type": "string",
+      "title": "Code"
+     },
+     "level": {
+      "type": "string",
+      "enum": [
+       "error",
+       "warning",
+       "conflict"
+      ],
+      "title": "Level"
+     },
+     "detail": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "required": [
+     "code",
+     "level"
+    ],
+    "title": "Issue"
+   },
+   "MemberIn": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Name"
+     }
+    },
+    "type": "object",
+    "required": [
+     "name"
+    ],
+    "title": "MemberIn"
+   },
+   "MemberOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "name"
+    ],
+    "title": "MemberOut"
+   },
+   "ParsedSheet": {
+    "properties": {
+     "headers": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Headers"
+     },
+     "rows": {
+      "items": {
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "type": "array",
+      "title": "Rows"
+     },
+     "mapping": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Mapping"
+     }
+    },
+    "type": "object",
+    "required": [
+     "headers",
+     "rows",
+     "mapping"
+    ],
+    "title": "ParsedSheet"
+   },
+   "Preview": {
+    "properties": {
+     "rows": {
+      "items": {
+       "$ref": "#/components/schemas/PreviewRow"
+      },
+      "type": "array",
+      "title": "Rows"
+     },
+     "counts": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "type": "object",
+      "title": "Counts"
+     }
+    },
+    "type": "object",
+    "required": [
+     "rows",
+     "counts"
+    ],
+    "title": "Preview"
+   },
+   "PreviewRequest": {
+    "properties": {
+     "mapping": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Mapping"
+     },
+     "rows": {
+      "items": {
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "type": "array",
+      "title": "Rows"
+     }
+    },
+    "type": "object",
+    "required": [
+     "mapping",
+     "rows"
+    ],
+    "title": "PreviewRequest"
+   },
+   "PreviewRow": {
+    "properties": {
+     "index": {
+      "type": "integer",
+      "title": "Index"
+     },
+     "draft": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/InvitationIn"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "ok",
+       "warning",
+       "conflict",
+       "error"
+      ],
+      "title": "Status"
+     },
+     "issues": {
+      "items": {
+       "$ref": "#/components/schemas/Issue"
+      },
+      "type": "array",
+      "title": "Issues"
+     },
+     "conflict": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Conflict"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "default_action": {
+      "type": "string",
+      "enum": [
+       "skip",
+       "update",
+       "new"
+      ],
+      "title": "Default Action"
+     }
+    },
+    "type": "object",
+    "required": [
+     "index",
+     "draft",
+     "status",
+     "issues",
+     "default_action"
+    ],
+    "title": "PreviewRow"
    },
    "SetupStatus": {
     "properties": {
