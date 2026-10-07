@@ -81,24 +81,25 @@ export function ImportPage() {
       {sheet && !preview && (
         <div className="flex flex-col gap-3 rounded-2xl border border-stone-200 bg-white p-4">
           <h2 className="text-lg font-semibold">{t("import.mapTitle")}</h2>
-          <p className="text-sm text-stone-600">{t("import.hint")} {t("import.mapHint")} ({t("import.rows", { count: sheet.rows.length })})</p>
-          <div className="overflow-x-auto">
-            <table className="w-full text-start text-sm">
-              <tbody>
-                {sheet.headers.map((h, i) => (
-                  <tr key={i} className="border-t border-stone-100">
-                    <td className="py-2 pe-4 font-medium" dir="auto">{h || "—"}</td>
-                    <td className="py-2 pe-4 text-stone-500" dir="auto">{sheet.rows.slice(0, 2).map((r) => r[i]).filter(Boolean).join(" · ")}</td>
-                    <td className="py-2">
-                      <select className={select} value={mapping[i]} onChange={(e) => setMapping(mapping.map((m, j) => (j === i ? e.target.value : m)))}>
-                        {targets.map((tg) => <option key={tg} value={tg}>{label(tg)}</option>)}
-                      </select>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <p className="text-sm text-stone-600">{t("import.mapHint")} ({t("import.rows", { count: sheet.rows.length })})</p>
+          <ul className="divide-y divide-stone-100">
+            {sheet.headers.map((h, i) => {
+              const samples = sheet.rows.slice(0, 2).map((r) => r[i]).filter(Boolean);
+              return (
+                <li key={i} className="flex items-center justify-between gap-4 py-3">
+                  <div className="min-w-0">
+                    <div className="font-medium" dir="auto">{h || "—"}</div>
+                    <div className="truncate text-sm text-stone-500">
+                      {samples.map((v, k) => <span key={k}>{k > 0 && " · "}<bdi>{v}</bdi></span>)}
+                    </div>
+                  </div>
+                  <select className={`${select} w-40 shrink-0`} value={mapping[i]} onChange={(e) => setMapping(mapping.map((m, j) => (j === i ? e.target.value : m)))}>
+                    {targets.map((tg) => <option key={tg} value={tg}>{label(tg)}</option>)}
+                  </select>
+                </li>
+              );
+            })}
+          </ul>
           <div className="flex gap-2">
             <button onClick={() => runPreview.mutate()} disabled={runPreview.isPending} className="rounded-lg bg-stone-900 px-4 py-2 text-white disabled:opacity-50">{t("import.preview")}</button>
             <button onClick={() => setSheet(null)} className="px-4 py-2 text-stone-600">{t("common.cancel")}</button>
