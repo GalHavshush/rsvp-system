@@ -1,0 +1,17 @@
+This is an architecture proposal for an open source RSVP and seating system for weddings and events. Nothing is built until it's approved.
+
+It's a self hosted modular monolith. FastAPI and PostgreSQL on the back, React on the front. Hebrew and right to left come first, and WhatsApp waits behind a provider interface.
+
+Everything hangs off an event. An invitation is both the unit of RSVP and the party that gets seated. Guests and admins update RSVPs through the same service function, so there is only one system.
+
+One docker compose command starts it all. Caddy serves the static app and proxies the API on the same origin, so cookies and CSRF stay simple. Messages go out through a swappable provider.
+
+Each invitation gets an unguessable link. Admins import spreadsheets, map the columns, preview, then commit. Phone numbers are normalized so duplicates are caught.
+
+For now a test provider exports a CSV, so you can send messages yourself. The WhatsApp Cloud provider can be added later without touching RSVP or invitation code.
+
+Seating is a drag and drop canvas. An OR Tools solver can fill tables, respecting locks and constraints, and explains its choices. Snapshots let you roll back.
+
+Already decided: an MIT license, manual table overflow with a warning, maybe guests as a per invitation opt in, and Israel as the default region.
+
+Seven phases, each demoable with seed data: foundation, invitations, RSVP, messaging, seating, the solver, and finally exports and polish.

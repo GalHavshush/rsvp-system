@@ -1,0 +1,17 @@
+{
+  "views": ["overview", "diagrams", "steps", "files", "document"],
+  "accent": "#3f9d68",
+  "tldr": [
+    "Self-hosted modular monolith: FastAPI, PostgreSQL, React/Vite/TS/Tailwind, Hebrew-first RTL.",
+    "An invitation is both the RSVP unit and the seating party; one set_rsvp function serves guests and admins.",
+    "WhatsApp is deferred behind a messaging provider interface; a test provider exports CSV.",
+    "Seating uses a dnd-kit canvas, an OR-Tools solver, locks and snapshots.",
+    "Seven roadmap phases, each demoable with seed data."
+  ],
+  "diagrams": [{
+    "title": "Serving architecture",
+    "description": "Components named in the plan and how requests flow between them.",
+    "mermaid": "flowchart TD\n  W[React app] --> C[Caddy]\n  C -->|/api proxy| A[FastAPI]\n  A --> D[(PostgreSQL)]\n  A --> M[Messaging provider]",
+    "sources": ["26-docker-self-hosting", "11-messaging-provider-architecture"]
+  }]
+}

@@ -1,0 +1,32 @@
+{
+  "app": { "name": "ניהול אירוע" },
+  "common": { "save": "שמירה", "cancel": "ביטול", "delete": "מחיקה", "edit": "עריכה", "logout": "התנתקות", "loading": "טוען…", "language": "English" },
+  "auth": {
+    "setupTitle": "הגדרה ראשונית",
+    "setupHint": "החשבון הראשון הוא הבעלים של המערכת.",
+    "loginTitle": "התחברות",
+    "email": "אימייל",
+    "password": "סיסמה (לפחות 8 תווים)",
+    "setupSubmit": "יצירת חשבון בעלים",
+    "loginSubmit": "כניסה"
+  },
+  "events": {
+    "title": "אירועים",
+    "new": "אירוע חדש",
+    "empty": "עדיין אין אירועים. צרו את הראשון!",
+    "confirmDelete": "למחוק את האירוע וכל נתוני האורחים שלו? אי אפשר לשחזר.",
+    "types": { "wedding": "חתונה", "other": "אחר" },
+    "fields": {
+      "name": "שם האירוע", "type": "סוג אירוע", "date": "תאריך", "time": "שעה", "venue": "מקום",
+      "address": "כתובת", "waze_url": "קישור ל-Waze", "maps_url": "קישור ל-Google Maps", "hosts": "מארחים",
+      "rsvp_deadline": "תאריך אחרון לאישור הגעה", "default_language": "שפת ברירת מחדל", "notes": "הערות"
+    }
+  },
+  "errors": {
+    "invalid_credentials": "אימייל או סיסמה שגויים",
+    "already_set_up": "המערכת כבר הוגדרה",
+    "too_many_attempts": "יותר מדי ניסיונות, נסו שוב בעוד כמה דקות",
+    "email_taken": "האימייל כבר בשימוש",
+    "generic": "משהו השתבש, נסו שוב"
+  }
+}

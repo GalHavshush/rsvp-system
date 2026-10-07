@@ -1,0 +1,32 @@
+{
+  "app": { "name": "Event Manager" },
+  "common": { "save": "Save", "cancel": "Cancel", "delete": "Delete", "edit": "Edit", "logout": "Log out", "loading": "Loading…", "language": "עברית" },
+  "auth": {
+    "setupTitle": "Initial setup",
+    "setupHint": "The first account becomes the system owner.",
+    "loginTitle": "Log in",
+    "email": "Email",
+    "password": "Password (at least 8 characters)",
+    "setupSubmit": "Create owner account",
+    "loginSubmit": "Log in"
+  },
+  "events": {
+    "title": "Events",
+    "new": "New event",
+    "empty": "No events yet. Create the first one!",
+    "confirmDelete": "Delete this event and all its guest data? This cannot be undone.",
+    "types": { "wedding": "Wedding", "other": "Other" },
+    "fields": {
+      "name": "Event name", "type": "Event type", "date": "Date", "time": "Time", "venue": "Venue",
+      "address": "Address", "waze_url": "Waze link", "maps_url": "Google Maps link", "hosts": "Hosts",
+      "rsvp_deadline": "RSVP deadline", "default_language": "Default language", "notes": "Notes"
+    }
+  },
+  "errors": {
+    "invalid_credentials": "Wrong email or password",
+    "already_set_up": "The system is already set up",
+    "too_many_attempts": "Too many attempts, try again in a few minutes",
+    "email_taken": "Email already in use",
+    "generic": "Something went wrong, please try again"
+  }
+}
