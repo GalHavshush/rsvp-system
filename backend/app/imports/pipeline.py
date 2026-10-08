@@ -88,13 +88,22 @@ def build_preview(db: Session, event_id: int, rows: list[list[str]], mapping: li
     return Preview(rows=out, counts=counts)
 
 
+class ImportBlocked(Exception):
+    def __init__(self, code: str):
+        self.code = code
+
+
 def commit(db: Session, event_id: int, rows, mapping, actions) -> CommitResult:
     """Applies the preview with the admin's chosen actions in one transaction. Errors are never imported."""
     preview = build_preview(db, event_id, rows, mapping)
+    if any(r.status == "error" for r in preview.rows):
+        raise ImportBlocked("import_has_errors")  # fix the file or mapping first
+    if any(r.status != "ok" and r.index not in actions for r in preview.rows):
+        raise ImportBlocked("import_needs_decisions")  # every warning/conflict needs an explicit choice
     created = updated = skipped = 0
     for r in preview.rows:
         action = actions.get(r.index, r.default_action)
-        if r.status == "error" or r.draft is None or action == "skip":
+        if r.draft is None or action == "skip":
             skipped += 1
         elif action == "update" and r.conflict:
             service.apply_input(db, db.get(Invitation, r.conflict.invitation_id), r.draft)

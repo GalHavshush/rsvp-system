@@ -6,6 +6,7 @@ from app.core.db import get_db
 from app.events.router import get_event
 from app.imports import mapping as mp
 from app.imports import pipeline
+from app.imports.pipeline import ImportBlocked
 from app.imports.parser import MAX_BYTES, ParseError, parse_upload
 from app.imports.schemas import CommitRequest, CommitResult, ParsedSheet, Preview, PreviewRequest
 
@@ -40,4 +41,7 @@ def preview(event_id: int, body: PreviewRequest, db: Session = Depends(get_db)):
 @router.post("/commit", response_model=CommitResult)
 def commit(event_id: int, body: CommitRequest, db: Session = Depends(get_db)):
     _check(db, event_id, body)
-    return pipeline.commit(db, event_id, body.rows, body.mapping, body.actions)
+    try:
+        return pipeline.commit(db, event_id, body.rows, body.mapping, body.actions)
+    except ImportBlocked as e:
+        raise HTTPException(409, e.code)

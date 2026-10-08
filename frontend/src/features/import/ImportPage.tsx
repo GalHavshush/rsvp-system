@@ -51,6 +51,9 @@ export function ImportPage() {
     onSuccess: (r) => { setResult(r); setSheet(null); setPreview(null); },
   });
   const error = upload.error ?? runPreview.error ?? commit.error;
+  const hasErrors = (preview?.counts.error ?? 0) > 0;
+  const pending = preview ? preview.rows.filter((r) => r.status !== "ok" && r.status !== "error" && !actions[r.index]).length : 0;
+  const blocked = hasErrors || pending > 0;
 
   // Target options: fixed ones plus person/phone N up to the highest N currently used (+1).
   const maxN = Math.max(3, ...mapping.map((m) => Number(m.split(":")[1]) || 0)) + 1;
@@ -114,7 +117,7 @@ export function ImportPage() {
           </div>
           <ul className="divide-y divide-stone-100">
             {preview.rows.map((r) => {
-              const action = actions[r.index] ?? r.default_action;
+              const action = actions[r.index] ?? "";
               return (
                 <li key={r.index} className="flex items-start justify-between gap-4 py-3">
                   <div className="flex min-w-0 flex-col gap-1">
@@ -138,19 +141,22 @@ export function ImportPage() {
                       </div>
                     )}
                   </div>
-                  {r.status !== "error" && (r.conflict || r.default_action === "skip") && (
-                    <select className={`${select} w-36 shrink-0`} value={action} onChange={(e) => setActions({ ...actions, [r.index]: e.target.value as Action })}>
+                  {r.status !== "error" && r.status !== "ok" && (
+                    <select className={`${select} w-36 shrink-0 ${action ? "" : "border-amber-400"}`} value={action}
+                      onChange={(e) => setActions({ ...actions, [r.index]: e.target.value as Action })}>
+                      <option value="" disabled>{t("import.action.choose")}</option>
                       <option value="skip">{t("import.action.skip")}</option>
                       {r.conflict && <option value="update">{t("import.action.update")}</option>}
-                      <option value="new">{t("import.action.new")}</option>
+                      <option value="new">{t(r.conflict ? "import.action.new" : "import.action.anyway")}</option>
                     </select>
                   )}
                 </li>
               );
             })}
           </ul>
+          {blocked && <p role="status" className="text-sm text-amber-800">{hasErrors ? t("import.blockedErrors") : t("import.blockedPending", { count: pending })}</p>}
           <div className="flex gap-2">
-            <button onClick={() => commit.mutate()} disabled={commit.isPending} className="rounded-lg bg-stone-900 px-4 py-2 text-white disabled:opacity-50">{t("import.confirm")}</button>
+            <button onClick={() => commit.mutate()} disabled={commit.isPending || blocked} className="rounded-lg bg-stone-900 px-4 py-2 text-white disabled:opacity-40">{t("import.confirm")}</button>
             <button onClick={() => setPreview(null)} className="px-4 py-2 text-stone-600">{t("import.back")}</button>
           </div>
         </div>

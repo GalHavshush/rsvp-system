@@ -57,7 +57,9 @@
     "too_many_rows": "Too many rows (max 5000)",
     "unreadable_file": "Could not read the file",
     "invalid_mapping": "Invalid column mapping",
-    "duplicate_mapping": "The same target is chosen for more than one column"
+    "duplicate_mapping": "The same target is chosen for more than one column",
+    "import_has_errors": "Some rows have errors. Fix the file or the column mapping and try again.",
+    "import_needs_decisions": "rows need a decision before importing."
   },
   "nav": {
     "back": "All events",
@@ -136,14 +138,18 @@
     "action": {
       "skip": "Skip",
       "update": "Update existing",
-      "new": "Import as new"
+      "new": "Import as new",
+      "choose": "Choose action",
+      "anyway": "Import anyway"
     },
     "conflictWith": "Existing: {{name}}",
     "colRow": "Row",
     "colName": "Invitation",
     "colPeople": "People",
     "colIssues": "Issues",
-    "colAction": "Action"
+    "colAction": "Action",
+    "blockedErrors": "Some rows have errors. Fix the file or the column mapping and try again.",
+    "blockedPending": "{{count}} rows need a decision before importing."
   },
   "issues": {
     "missing_name": "Missing invitation name",

@@ -102,9 +102,28 @@ def test_conflicts_never_overwrite_silently(client):
     # re-import same file: everything conflicts, default is skip
     prev = client.post(f"/api/events/{eid}/imports/preview", json=body).json()
     assert prev["counts"]["conflict"] == 3 and all(r["default_action"] == "skip" for r in prev["rows"])
-    assert client.post(f"/api/events/{eid}/imports/commit", json=body).json() == {"created": 0, "updated": 0, "skipped": 3}
+    # conflicts need an explicit decision; committing without one is refused
+    assert client.post(f"/api/events/{eid}/imports/commit", json=body).status_code == 409
+    skip_all = {"0": "skip", "1": "skip", "2": "skip"}
+    assert client.post(f"/api/events/{eid}/imports/commit", json={**body, "actions": skip_all}).json() == {"created": 0, "updated": 0, "skipped": 3}
     assert client.get(f"/api/events/{eid}/invitations").json()["total"] == 3
     # explicit choices: update row 0, import row 1 as new
-    res = client.post(f"/api/events/{eid}/imports/commit", json={**body, "actions": {"0": "update", "1": "new"}}).json()
+    res = client.post(f"/api/events/{eid}/imports/commit", json={**body, "actions": {"0": "update", "1": "new", "2": "skip"}}).json()
     assert res == {"created": 1, "updated": 1, "skipped": 1}
     assert client.get(f"/api/events/{eid}/invitations").json()["total"] == 4
+
+
+def test_commit_blocked_by_errors_or_undecided_rows(client):
+    eid = _login(client)
+    mapping = ["invitation_name", "person:1", "phone:1"]
+    url = f"/api/events/{eid}/imports/commit"
+    # error row (missing name) blocks everything, even with explicit actions
+    r = client.post(url, json={"mapping": mapping, "rows": [["", "x", "0501111111"], ["Ok", "Ok", "0502222222"]], "actions": {"0": "skip"}})
+    assert r.status_code == 409 and r.json()["detail"] == "import_has_errors"
+    # warning row (invalid phone) needs a decision
+    rows = [["A", "A", "12345"], ["B", "B", "0503333333"]]
+    r = client.post(url, json={"mapping": mapping, "rows": rows})
+    assert r.status_code == 409 and r.json()["detail"] == "import_needs_decisions"
+    ok = client.post(url, json={"mapping": mapping, "rows": rows, "actions": {"0": "new"}})
+    assert ok.json() == {"created": 2, "updated": 0, "skipped": 0}
+    assert client.get(f"/api/events/{eid}/invitations").json()["total"] == 2

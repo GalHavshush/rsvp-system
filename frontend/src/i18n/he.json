@@ -57,7 +57,9 @@
     "too_many_rows": "יותר מדי שורות (עד 5000)",
     "unreadable_file": "לא ניתן לקרוא את הקובץ",
     "invalid_mapping": "התאמת עמודות לא תקינה",
-    "duplicate_mapping": "אותו יעד נבחר ליותר מעמודה אחת"
+    "duplicate_mapping": "אותו יעד נבחר ליותר מעמודה אחת",
+    "import_has_errors": "יש שורות עם שגיאות. תקנו את הקובץ או את התאמת העמודות ונסו שוב.",
+    "import_needs_decisions": "שורות דורשות החלטה לפני הייבוא."
   },
   "nav": {
     "back": "כל האירועים",
@@ -136,14 +138,18 @@
     "action": {
       "skip": "דילוג",
       "update": "עדכון קיימת",
-      "new": "ייבוא כחדשה"
+      "new": "ייבוא כחדשה",
+      "choose": "בחרו פעולה",
+      "anyway": "ייבוא בכל זאת"
     },
     "conflictWith": "קיימת: {{name}}",
     "colRow": "שורה",
     "colName": "הזמנה",
     "colPeople": "אנשים",
     "colIssues": "בעיות",
-    "colAction": "פעולה"
+    "colAction": "פעולה",
+    "blockedErrors": "יש שורות עם שגיאות. תקנו את הקובץ או את התאמת העמודות ונסו שוב.",
+    "blockedPending": "{{count}} שורות דורשות החלטה לפני הייבוא."
   },
   "issues": {
     "missing_name": "חסר שם הזמנה",
