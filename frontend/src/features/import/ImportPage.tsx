@@ -22,6 +22,7 @@ export function ImportPage() {
   const [mapping, setMapping] = useState<string[]>([]);
   const [preview, setPreview] = useState<Preview | null>(null);
   const [actions, setActions] = useState<Record<number, Action>>({});
+  const [editing, setEditing] = useState<{ index: number; values: string[] } | null>(null);
   const [result, setResult] = useState<components["schemas"]["CommitResult"] | null>(null);
 
   const upload = useMutation({
@@ -35,12 +36,12 @@ export function ImportPage() {
     onSuccess: (s) => { setSheet(s); setMapping(s.mapping); setPreview(null); setResult(null); },
   });
   const runPreview = useMutation({
-    mutationFn: async () => {
-      const r = await api.POST("/api/events/{event_id}/imports/preview", { params: { path }, body: { mapping, rows: sheet!.rows } });
+    mutationFn: async (rows?: string[][]) => {
+      const r = await api.POST("/api/events/{event_id}/imports/preview", { params: { path }, body: { mapping, rows: rows ?? sheet!.rows } });
       if (r.error) throw new Error(errorCode(r.error));
       return r.data;
     },
-    onSuccess: (p) => { setPreview(p); setActions({}); },
+    onSuccess: (p) => setPreview(p),
   });
   const commit = useMutation({
     mutationFn: async () => {
@@ -59,6 +60,19 @@ export function ImportPage() {
   const maxN = Math.max(3, ...mapping.map((m) => Number(m.split(":")[1]) || 0)) + 1;
   const targets = ["ignore", "invitation_name", "group", "note",
     ...Array.from({ length: maxN }, (_, i) => `person:${i + 1}`), ...Array.from({ length: maxN }, (_, i) => `phone:${i + 1}`)];
+  // Fixing a row happens in the preview: update the cells (or drop the row), then re-validate everything.
+  const changeRows = (rows: string[][], resetActions: boolean) => {
+    setSheet({ ...sheet!, rows });
+    if (resetActions) setActions({});
+    setEditing(null);
+    runPreview.mutate(rows);
+  };
+  const saveEdit = () => {
+    if (!editing) return;
+    const { [editing.index]: _drop, ...rest } = actions;
+    setActions(rest);
+    changeRows(sheet!.rows.map((r, i) => (i === editing.index ? editing.values : r)), false);
+  };
   const label = (tg: string) => { const [k, n] = tg.split(":"); return t(`import.target.${k}`, { n }); };
 
   if (result) return (
@@ -104,7 +118,7 @@ export function ImportPage() {
             })}
           </ul>
           <div className="flex gap-2">
-            <button onClick={() => runPreview.mutate()} disabled={runPreview.isPending} className="rounded-lg bg-stone-900 px-4 py-2 text-white disabled:opacity-50">{t("import.preview")}</button>
+            <button onClick={() => runPreview.mutate(undefined)} disabled={runPreview.isPending} className="rounded-lg bg-stone-900 px-4 py-2 text-white disabled:opacity-50">{t("import.preview")}</button>
             <button onClick={() => setSheet(null)} className="px-4 py-2 text-stone-600">{t("common.cancel")}</button>
           </div>
         </div>
@@ -140,15 +154,39 @@ export function ImportPage() {
                         {r.conflict && <span className="text-xs text-stone-500">{t("import.conflictWith", { name: r.conflict.invitation_name })}</span>}
                       </div>
                     )}
+                    {editing?.index === r.index && (
+                      <form className="mt-2 grid gap-2 sm:grid-cols-2" onSubmit={(e) => { e.preventDefault(); saveEdit(); }}>
+                        {mapping.map((tg, col) => tg === "ignore" ? null : (
+                          <label key={col}>
+                            <span className="mb-0.5 block text-xs text-stone-500">{label(tg)}</span>
+                            <input dir={tg.startsWith("phone") ? "ltr" : "auto"} value={editing.values[col] ?? ""}
+                              onChange={(e) => setEditing({ ...editing, values: editing.values.map((v, k) => (k === col ? e.target.value : v)) })}
+                              className="w-full rounded-lg border border-stone-300 bg-white px-2 py-1 text-sm" />
+                          </label>
+                        ))}
+                        <div className="flex gap-2 sm:col-span-2">
+                          <button className="rounded-lg bg-stone-900 px-3 py-1 text-sm text-white">{t("import.applyFix")}</button>
+                          <button type="button" onClick={() => setEditing(null)} className="px-3 py-1 text-sm text-stone-600">{t("common.cancel")}</button>
+                        </div>
+                      </form>
+                    )}
                   </div>
-                  {r.status !== "error" && r.status !== "ok" && (
-                    <select className={`${select} w-36 shrink-0 ${action ? "" : "border-amber-400"}`} value={action}
-                      onChange={(e) => setActions({ ...actions, [r.index]: e.target.value as Action })}>
-                      <option value="" disabled>{t("import.action.choose")}</option>
-                      <option value="skip">{t("import.action.skip")}</option>
-                      {r.conflict && <option value="update">{t("import.action.update")}</option>}
-                      <option value="new">{t(r.conflict ? "import.action.new" : "import.action.anyway")}</option>
-                    </select>
+                  {r.status !== "ok" && (
+                    <div className="flex shrink-0 flex-col items-end gap-2">
+                      {r.status !== "error" && (
+                        <select className={`${select} w-36 ${action ? "" : "border-amber-400"}`} value={action}
+                          onChange={(e) => setActions({ ...actions, [r.index]: e.target.value as Action })}>
+                          <option value="" disabled>{t("import.action.choose")}</option>
+                          <option value="skip">{t("import.action.skip")}</option>
+                          {r.conflict && <option value="update">{t("import.action.update")}</option>}
+                          <option value="new">{t(r.conflict ? "import.action.new" : "import.action.anyway")}</option>
+                        </select>
+                      )}
+                      <div className="flex gap-3 text-sm">
+                        <button onClick={() => setEditing({ index: r.index, values: [...sheet.rows[r.index]] })} className="text-stone-600 hover:text-stone-900">{t("import.fix")}</button>
+                        <button onClick={() => changeRows(sheet.rows.filter((_, i) => i !== r.index), true)} className="text-red-700">{t("import.removeRow")}</button>
+                      </div>
+                    </div>
                   )}
                 </li>
               );
@@ -157,7 +195,7 @@ export function ImportPage() {
           {blocked && <p role="status" className="text-sm text-amber-800">{hasErrors ? t("import.blockedErrors") : t("import.blockedPending", { count: pending })}</p>}
           <div className="flex gap-2">
             <button onClick={() => commit.mutate()} disabled={commit.isPending || blocked} className="rounded-lg bg-stone-900 px-4 py-2 text-white disabled:opacity-40">{t("import.confirm")}</button>
-            <button onClick={() => setPreview(null)} className="px-4 py-2 text-stone-600">{t("import.back")}</button>
+            <button onClick={() => { setPreview(null); setActions({}); setEditing(null); }} className="px-4 py-2 text-stone-600">{t("import.back")}</button>
           </div>
         </div>
       )}
