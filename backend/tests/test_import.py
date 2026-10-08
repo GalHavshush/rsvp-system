@@ -86,6 +86,10 @@ def test_validation_issues(client):
     assert codes[0] == ["missing_name"] and rows[0]["status"] == "error"
     assert codes[1] == ["invalid_phone"]
     assert codes[2] == [] and "duplicate_phone_in_file" in codes[3]
+    same_row = client.post(f"/api/events/{eid}/imports/preview", json={
+        "mapping": ["invitation_name", "person:1", "phone:1", "person:2", "phone:2"],
+        "rows": [["Pair", "A", "0502020202", "B", "0502020202"]]}).json()["rows"][0]
+    assert [i["code"] for i in same_row["issues"]] == ["duplicate_phone_in_file"]
     assert "duplicate_row" in codes[4] and rows[4]["default_action"] == "skip"
 
 

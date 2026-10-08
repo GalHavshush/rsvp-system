@@ -112,40 +112,43 @@ export function ImportPage() {
             <h2 className="me-auto text-lg font-semibold">{t("import.preview")}</h2>
             {Object.entries(preview.counts).map(([k, n]) => <span key={k} className={`rounded-full px-2 py-0.5 text-xs ${PILL[k]}`}>{t(`import.counts.${k}`)}: {n}</span>)}
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-start text-sm">
-              <thead><tr className="text-stone-500">
-                {["colRow", "colName", "colPeople", "colIssues", "colAction"].map((c) => <th key={c} className="py-1 pe-3 text-start font-normal">{t(`import.${c}`)}</th>)}
-              </tr></thead>
-              <tbody>
-                {preview.rows.map((r) => {
-                  const action = actions[r.index] ?? r.default_action;
-                  return (
-                    <tr key={r.index} className="border-t border-stone-100 align-top">
-                      <td className="py-2 pe-3 text-stone-500">{r.index + 1}</td>
-                      <td className="py-2 pe-3" dir="auto">{r.draft?.display_name ?? "—"}</td>
-                      <td className="py-2 pe-3 text-stone-600" dir="auto">{r.draft?.members.map((m) => m.name).join(", ")}</td>
-                      <td className="py-2 pe-3">
-                        <div className="flex flex-col gap-1">
-                          {r.issues.map((i, k) => <span key={k} className={`w-fit rounded-full px-2 py-0.5 text-xs ${PILL[i.level === "conflict" ? "conflict" : i.level]}`}>{t(`issues.${i.code}`, { detail: i.detail })}</span>)}
-                          {r.conflict && <span className="text-xs text-stone-500" dir="auto">{t("import.conflictWith", { name: r.conflict.invitation_name })}</span>}
-                        </div>
-                      </td>
-                      <td className="py-2">
-                        {r.status !== "error" && (r.conflict || r.default_action === "skip") && (
-                          <select className={select} value={action} onChange={(e) => setActions({ ...actions, [r.index]: e.target.value as Action })}>
-                            <option value="skip">{t("import.action.skip")}</option>
-                            {r.conflict && <option value="update">{t("import.action.update")}</option>}
-                            <option value="new">{t("import.action.new")}</option>
-                          </select>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+          <ul className="divide-y divide-stone-100">
+            {preview.rows.map((r) => {
+              const action = actions[r.index] ?? r.default_action;
+              return (
+                <li key={r.index} className="flex items-start justify-between gap-4 py-3">
+                  <div className="flex min-w-0 flex-col gap-1">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-xs text-stone-400">{r.index + 1}</span>
+                      <span className="font-medium" dir="auto">{r.draft?.display_name ?? "—"}</span>
+                    </div>
+                    {r.draft && r.draft.members.length > 0 && (
+                      <div className="truncate text-sm text-stone-500">
+                        {r.draft.members.map((m, k) => <span key={k}>{k > 0 && ", "}<bdi>{m.name}</bdi></span>)}
+                      </div>
+                    )}
+                    {(r.issues.length > 0 || r.conflict) && (
+                      <div className="flex flex-wrap gap-1">
+                        {r.issues.map((i, k) => (
+                          <span key={k} className={`rounded-full px-2 py-0.5 text-xs ${PILL[i.level]}`}>
+                            {t(`issues.${i.code}`, { detail: i.detail })}
+                          </span>
+                        ))}
+                        {r.conflict && <span className="text-xs text-stone-500">{t("import.conflictWith", { name: r.conflict.invitation_name })}</span>}
+                      </div>
+                    )}
+                  </div>
+                  {r.status !== "error" && (r.conflict || r.default_action === "skip") && (
+                    <select className={`${select} w-36 shrink-0`} value={action} onChange={(e) => setActions({ ...actions, [r.index]: e.target.value as Action })}>
+                      <option value="skip">{t("import.action.skip")}</option>
+                      {r.conflict && <option value="update">{t("import.action.update")}</option>}
+                      <option value="new">{t("import.action.new")}</option>
+                    </select>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
           <div className="flex gap-2">
             <button onClick={() => commit.mutate()} disabled={commit.isPending} className="rounded-lg bg-stone-900 px-4 py-2 text-white disabled:opacity-50">{t("import.confirm")}</button>
             <button onClick={() => setPreview(null)} className="px-4 py-2 text-stone-600">{t("import.back")}</button>

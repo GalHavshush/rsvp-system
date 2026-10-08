@@ -64,9 +64,9 @@ def build_preview(db: Session, event_id: int, rows: list[list[str]], mapping: li
                 if e164 is None:
                     issues.append(Issue(code="invalid_phone", level="warning", detail=c.phone))
                     continue
-                e164s.append(e164)
-                if e164 in seen_phones:
+                if e164 in seen_phones or e164 in e164s:  # earlier row, or earlier phone in this same row
                     issues.append(Issue(code="duplicate_phone_in_file", level="warning", detail=e164))
+                e164s.append(e164)
                 if e164 in existing_by_phone and not conflict:
                     conflict = existing_by_phone[e164]
                     issues.append(Issue(code="existing_phone", level="conflict", detail=e164))
