@@ -22,7 +22,7 @@ function initial(inv?: Out) {
 }
 
 export function InvitationForm({ eventId, invitation, groups, onDone }: {
-  eventId: number; invitation?: Out; groups: Group[]; onDone: () => void;
+  eventId: number; invitation?: Out; groups: Group[]; onDone: (saved?: Out) => void;
 }) {
   const { t } = useTranslation();
   const qc = useQueryClient();
@@ -40,9 +40,10 @@ export function InvitationForm({ eventId, invitation, groups, onDone }: {
       const r = invitation
         ? await api.PUT("/api/invitations/{invitation_id}", { params: { path: { invitation_id: invitation.id } }, body })
         : await api.POST("/api/events/{event_id}/invitations", { params: { path: { event_id: eventId } }, body });
-      if (r.error) throw new Error("generic");
+      if (r.error || !r.data) throw new Error("generic");
+      return r.data;
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["invitations"] }); qc.invalidateQueries({ queryKey: ["groups"] }); onDone(); },
+    onSuccess: (saved) => { qc.invalidateQueries({ queryKey: ["invitations"] }); qc.invalidateQueries({ queryKey: ["groups"] }); onDone(saved); },
   });
   const onSubmit = (e: FormEvent) => { e.preventDefault(); save.mutate(); };
   const setMember = (i: number, v: string) => setF((p) => ({ ...p, members: p.members.map((m, j) => (j === i ? v : m)) }));
@@ -55,7 +56,7 @@ export function InvitationForm({ eventId, invitation, groups, onDone }: {
   const lbl = "mb-1 block text-sm text-stone-600";
   const link = "text-sm text-stone-600 hover:text-stone-900";
   return (
-    <form onSubmit={onSubmit} className="grid gap-4 rounded-2xl border border-stone-200 bg-white p-4 sm:grid-cols-2">
+    <form onSubmit={onSubmit} className="grid gap-4 rounded-2xl border border-stone-200 bg-white p-4">
       <label><span className={lbl}>{t("invitations.form.name")}</span>
         <input required className={input} dir="auto" value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} /></label>
       <label><span className={lbl}>{t("invitations.form.group")}</span>
@@ -85,12 +86,12 @@ export function InvitationForm({ eventId, invitation, groups, onDone }: {
         ))}
         <button type="button" className={`${link} self-start`} onClick={() => setF({ ...f, contacts: [...f.contacts, { phone: "", member: null }] })}>+ {t("invitations.form.addPhone")}</button>
       </fieldset>
-      <label className="sm:col-span-2"><span className={lbl}>{t("invitations.form.notes")}</span>
+      <label><span className={lbl}>{t("invitations.form.notes")}</span>
         <input className={input} dir="auto" value={f.notes} onChange={(e) => setF({ ...f, notes: e.target.value })} /></label>
-      {save.error && <p role="alert" className="text-sm text-red-700 sm:col-span-2">{t("errors.generic")}</p>}
-      <div className="flex gap-2 sm:col-span-2">
+      {save.error && <p role="alert" className="text-sm text-red-700">{t("errors.generic")}</p>}
+      <div className="flex gap-2">
         <button disabled={save.isPending} className="rounded-lg bg-stone-900 px-4 py-2 text-white disabled:opacity-50">{t("common.save")}</button>
-        <button type="button" onClick={onDone} className="rounded-lg px-4 py-2 text-stone-600">{t("common.cancel")}</button>
+        <button type="button" onClick={() => onDone()} className="rounded-lg px-4 py-2 text-stone-600">{t("common.cancel")}</button>
       </div>
     </form>
   );

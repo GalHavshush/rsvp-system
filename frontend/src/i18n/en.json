@@ -106,7 +106,8 @@
       "noMember": "Not linked",
       "invalid": "Invalid number",
       "remove": "Remove"
-    }
+    },
+    "choose": "Choose an invitation to view or edit"
   },
   "import": {
     "title": "Import invitations from a file",
